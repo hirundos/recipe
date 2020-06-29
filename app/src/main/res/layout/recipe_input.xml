@@ -13,7 +13,7 @@
             android:orientation="horizontal"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:id="@+id/Kind">
+            android:id="@+id/kindRadioBtn">
 
             <RadioButton
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         android:background="#ffdeab"
         android:lines="10"
         android:hint="레시피 입력"
-        android:id="@+id/recipe"/>
+        android:id="@+id/contents"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -12,7 +12,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RmainActivity  extends AppCompatActivity {
+public class mainActivity extends AppCompatActivity {
     Button input,list,search;
     SQLiteDatabase sqlDB;
 
@@ -20,6 +20,7 @@ public class RmainActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recipe_main);
+
 
         input=(Button)findViewById(R.id.input);
         list=(Button)findViewById(R.id.list);

@@ -15,48 +15,48 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.room.Room;
+
 
 public class Input_Activity extends Activity{
 
-    RadioGroup Kind;
+    RadioGroup foodKind;
     Button input, input_back;
-    EditText recipe,name;
-    myDBHelper Recipe;
-    SQLiteDatabase sqlDB;
+    EditText contents, name;
+    AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recipe_input);
 
-        Kind=(RadioGroup)findViewById(R.id.Kind);
+        db= Room.databaseBuilder(this, AppDatabase.class,"recipe-db" )
+                .allowMainThreadQueries()
+                .build();
+
+        foodKind=(RadioGroup)findViewById(R.id.kindRadioBtn);
         input=(Button)findViewById(R.id.btn_input);
         input_back=(Button)findViewById(R.id.input_back);
-        recipe=(EditText)findViewById(R.id.recipe);
+        contents=(EditText)findViewById(R.id.contents);
         name=(EditText)findViewById(R.id.name);
-        Recipe=new myDBHelper(this);
 
         input.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                sqlDB = Recipe.getWritableDatabase();
-                int id = Kind.getCheckedRadioButtonId();
-                RadioButton setKind = (RadioButton) findViewById(id);
+
+                int id = foodKind.getCheckedRadioButtonId();
+                RadioButton kindDetail = (RadioButton) findViewById(id);
                 if (name.getText().toString().length() == 0) {
                     Toast.makeText(getApplicationContext(), "이름이 입력되지 않았습니다", Toast.LENGTH_SHORT).show();
-                } else if (recipe.getText().toString().length() == 0) {
+                } else if (contents.getText().toString().length() == 0) {
                     Toast.makeText(getApplicationContext(), "레시피가 입력되지 않았습니다", Toast.LENGTH_SHORT).show();
-                } else if (Kind.getCheckedRadioButtonId() == -1) {
+                } else if (foodKind.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(getApplicationContext(), "음식 종류가 선택되지 않았습니다", Toast.LENGTH_SHORT).show();
                 } else {
-                    try {
-                        sqlDB.execSQL("INSERT INTO Recipe VALUES ('" + name.getText().toString() + "','" + setKind.getText().toString() + "','" + recipe.getText().toString() + "');");
-                        Toast.makeText(getApplicationContext(), "저장 완료", Toast.LENGTH_SHORT).show();
-                        name.setText("");
-                        recipe.setText("");
-                        Kind.clearCheck();
-                    } catch (SQLException e) {
-                        Toast.makeText(getApplicationContext(), "저장 실패", Toast.LENGTH_SHORT).show();
-                    }
+                    db.recipeDao().insert(new Recipe(
+                            name.getText().toString(), kindDetail.getText().toString(), contents.getText().toString()));
+                    name.setText("");
+                    contents.setText("");
+                    foodKind.clearCheck();
                 }
             }
         });

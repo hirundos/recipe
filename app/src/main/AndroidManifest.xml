@@ -13,7 +13,7 @@
         <activity android:name=".List_Activity"/>
         <activity android:name=".Recipe_View_Activity"/>
         <activity android:name=".Search_Activity"/>
-        <activity android:name=".RmainActivity">
+        <activity android:name=".mainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
