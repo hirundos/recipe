@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import com.example.dkdus.cashtrans.AppDatabase;
 import com.example.dkdus.cashtrans.R;
 import com.example.dkdus.cashtrans.databinding.RecipeViewBinding;
 import com.example.dkdus.cashtrans.model.Recipe;
+import com.example.dkdus.cashtrans.model.RecipeDao;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -41,7 +43,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.recipe_view);
 
         db= Room.databaseBuilder(this, AppDatabase.class,"recipe-db" )
-                .allowMainThreadQueries()
                 .build();
 
         date = LocalDate.now().format(formatter);
@@ -85,7 +86,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     void RecipeAdd(){
         Recipe addRecipe = new Recipe(
                 binding.name.getText().toString(), binding.kind.getSelectedItem().toString(), binding.content.getText().toString(),date);
-        db.recipeDao().insert(addRecipe);
+        new InsertAsyncTask(db.recipeDao()).execute(addRecipe);
         setResult(RESULT_OK);
         finish();
     }
@@ -93,12 +94,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
         recipe.setName(binding.name.getText().toString());
         recipe.setContents(binding.content.getText().toString());
         recipe.setKind(binding.kind.getSelectedItem().toString());
-        db.recipeDao().update(recipe);
+
+        new UpdateAsyncTask(db.recipeDao()).execute(recipe);
         setResult(RESULT_OK);
         finish();
     }
     void RecipeDelete(){
-        db.recipeDao().delete(recipe);
+
+        new DeleteAsyncTask(db.recipeDao()).execute(recipe);
         setResult(RESULT_OK);
         finish();
     }
@@ -115,7 +118,48 @@ public class RecipeDetailActivity extends AppCompatActivity {
             default:
                 return -1;
         }
+    }
 
+    private static class InsertAsyncTask extends AsyncTask<Recipe, Void, Void>{
+        RecipeDao mRecipeDao;
+
+        public InsertAsyncTask(RecipeDao mRecipeDao) {
+            this.mRecipeDao = mRecipeDao;
+        }
+
+        @Override
+        protected Void doInBackground(Recipe... recipes) {
+            mRecipeDao.insert(recipes[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateAsyncTask extends AsyncTask<Recipe, Void, Void>{
+        RecipeDao mRecipeDao;
+
+        public UpdateAsyncTask(RecipeDao mRecipeDao) {
+            this.mRecipeDao = mRecipeDao;
+        }
+
+        @Override
+        protected Void doInBackground(Recipe... recipes) {
+            mRecipeDao.update(recipes[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAsyncTask extends AsyncTask<Recipe, Void, Void>{
+        RecipeDao mRecipeDao;
+
+        public DeleteAsyncTask(RecipeDao mRecipeDao) {
+            this.mRecipeDao = mRecipeDao;
+        }
+
+        @Override
+        protected Void doInBackground(Recipe... recipes) {
+            mRecipeDao.delete(recipes[0]);
+            return null;
+        }
     }
 }
 
