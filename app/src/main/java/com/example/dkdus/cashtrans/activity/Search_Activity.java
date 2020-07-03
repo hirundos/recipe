@@ -1,4 +1,4 @@
-package com.example.dkdus.cashtrans;
+package com.example.dkdus.cashtrans.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.dkdus.cashtrans.R;
 
 
 public class Search_Activity extends Activity{

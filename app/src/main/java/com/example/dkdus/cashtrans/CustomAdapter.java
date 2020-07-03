@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.dkdus.cashtrans.model.Recipe;
+
 import java.util.List;
 
 public class CustomAdapter extends ArrayAdapter<Recipe> {
@@ -31,16 +33,37 @@ public class CustomAdapter extends ArrayAdapter<Recipe> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        ViewHolder holder;
+        if(convertView == null){
+            holder = new ViewHolder();
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.recipe_listview, null, true);
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.recipe_list_listview, null, true);
+            TextView name = convertView.findViewById(R.id.rName);
+            TextView time = convertView.findViewById(R.id.rTime);
 
-        TextView kind = convertView.findViewById(R.id.rKind);
-        TextView name = convertView.findViewById(R.id.rName);
+            holder.name = name;
+            holder.time = time;
 
-        kind.setText(recipe.get(position).kind);
-        name.setText(recipe.get(position).name);
+            convertView.setTag(holder);
+        } else{
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        holder.name.setText(recipe.get(position).getName());
+        holder.time.setText(recipe.get(position).getTime());
 
         return convertView;
+    }
+
+    public void dataChange(List<Recipe> recipes){
+        this.recipe = recipes;
+        notifyDataSetChanged();
+    }
+
+    @Nullable
+    @Override
+    public Recipe getItem(int position) {
+        return recipe.get(position);
     }
 }

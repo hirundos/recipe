@@ -1,12 +1,6 @@
-package com.example.dkdus.cashtrans;
-
-/**
- * Created by ayeon on 2016-12-08.
- */
+package com.example.dkdus.cashtrans.activity;
 
 import android.app.Activity;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +9,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import com.example.dkdus.cashtrans.AppDatabase;
+import com.example.dkdus.cashtrans.R;
+import com.example.dkdus.cashtrans.model.Recipe;
 
-public class Input_Activity extends Activity{
+
+public class Input_Activity extends AppCompatActivity {
 
     RadioGroup foodKind;
     Button input, input_back;
@@ -53,7 +52,7 @@ public class Input_Activity extends Activity{
                     Toast.makeText(getApplicationContext(), "음식 종류가 선택되지 않았습니다", Toast.LENGTH_SHORT).show();
                 } else {
                     db.recipeDao().insert(new Recipe(
-                            name.getText().toString(), kindDetail.getText().toString(), contents.getText().toString()));
+                            name.getText().toString(), kindDetail.getText().toString(), contents.getText().toString(),""));
                     name.setText("");
                     contents.setText("");
                     foodKind.clearCheck();

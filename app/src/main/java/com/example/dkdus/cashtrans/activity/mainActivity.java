@@ -1,4 +1,4 @@
-package com.example.dkdus.cashtrans;
+package com.example.dkdus.cashtrans.activity;
 
 /**
  * Created by ayeon on 2016-12-08.
@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.dkdus.cashtrans.R;
 
 public class mainActivity extends AppCompatActivity {
     Button input,list,search;
