@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,9 +14,10 @@ import androidx.annotation.Nullable;
 
 import com.example.dkdus.cashtrans.model.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<Recipe> {
+public class CustomAdapter extends ArrayAdapter<Recipe> implements Filterable {
 
     List<Recipe> recipe;
     Context context;
@@ -66,4 +69,46 @@ public class CustomAdapter extends ArrayAdapter<Recipe> {
     public Recipe getItem(int position) {
         return recipe.get(position);
     }
+
+    @NonNull
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults filterResults = new FilterResults();
+                if(constraint == null || constraint.length() == 0){
+                    filterResults.count = recipe.size();
+                    filterResults.values = recipe;
+
+                }else{
+                    List<Recipe> resultsModel = new ArrayList<Recipe>();
+                    String searchStr = constraint.toString().toLowerCase();
+
+                    for(Recipe recipeModel:recipe){
+                        if(recipeModel.getName().contains(searchStr)){
+                            resultsModel.add(recipeModel);
+                            filterResults.count = resultsModel.size();
+                            filterResults.values = resultsModel;
+                        }
+                    }
+                }
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                recipe = (List<Recipe>) results.values;
+                if (results.count > 0) {
+                    notifyDataSetChanged() ;
+                } else {
+                    recipe = new ArrayList<Recipe>();
+                    notifyDataSetInvalidated() ;
+                }
+            }
+        };
+        return filter;
+    }
+
 }

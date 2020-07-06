@@ -1,12 +1,12 @@
 package com.example.dkdus.cashtrans.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -65,6 +65,7 @@ public class List_Activity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
+
     }
 
     @Override
@@ -94,4 +95,33 @@ public class List_Activity extends AppCompatActivity {
             return mRecipeDao.getAll();
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        SearchView searchView = (SearchView)menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(adapter.getCount() == 0){
+                    binding.searchResult.setVisibility(View.VISIBLE);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                binding.searchResult.setVisibility(View.GONE);
+                if(newText.length() > 0){
+                    adapter.getFilter().filter(newText);
+                } else{
+                    adapter.dataChange(recipes);
+                }
+                return false;
+            }
+        });
+        return true;
+    }
+
 }

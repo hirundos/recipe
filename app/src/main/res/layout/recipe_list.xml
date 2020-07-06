@@ -7,11 +7,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
+    <TextView
+        android:id="@+id/search_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recipe_listView">
-    </ListView>
+        android:layout_height="wrap_content"
+        android:text="검색 결과가 없습니다.\n더 찾아보려면 Click 하세요"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/recipe_listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/search_result" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -20,8 +28,8 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:src="@drawable/ic_add_black_24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/recipe_listView"
-        app:layout_constraintEnd_toEndOf="@+id/recipe_listView" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
