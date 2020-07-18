@@ -5,31 +5,39 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import com.example.dkdus.cashtrans.R;
 
 
 public class Search_Activity extends Activity{
-    Button naver,google;
+
+    private WebView mwebView;
+    private WebSettings mWebSettings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recipe_search);
-        naver=(Button)findViewById(R.id.search_naver);
-        google=(Button)findViewById(R.id.search_google);
 
-        naver.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse("http://naver.com"));
-                startActivity(intent);
-            }
-        });
-        google.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"));
-                startActivity(intent);
-            }
-        });
+        Intent intent = getIntent();
+        String getUrl = intent.getStringExtra("URL");
+
+        mwebView = (WebView)findViewById(R.id.web);
+
+        mwebView.setWebViewClient(new WebViewClient());
+        mWebSettings = mwebView.getSettings();
+        mWebSettings.setJavaScriptEnabled(true);
+        mWebSettings.setSupportMultipleWindows(false);
+        mWebSettings.setJavaScriptCanOpenWindowsAutomatically(false);
+        mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+
+        mwebView.loadUrl(getUrl);
+
+
+
     }
 }

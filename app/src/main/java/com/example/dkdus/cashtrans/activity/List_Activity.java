@@ -1,6 +1,7 @@
 package com.example.dkdus.cashtrans.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 
 public class List_Activity extends AppCompatActivity {
     private static int REQUEST_CODE = 1001;
+    String searchQuery;
     List<Recipe> recipes;
     AppDatabase db;
     RecipeListBinding binding;
@@ -66,6 +68,16 @@ public class List_Activity extends AppCompatActivity {
             }
         });
 
+        binding.searchResult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent searchIntent = new Intent(getApplicationContext(), Search_Activity.class);
+                String send = "https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query="+searchQuery;
+
+                searchIntent.putExtra("URL",send);
+                startActivity(searchIntent);
+            }
+        });
     }
 
     @Override
@@ -105,6 +117,7 @@ public class List_Activity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if(adapter.getCount() == 0){
+                    searchQuery = query;
                     binding.searchResult.setVisibility(View.VISIBLE);
                 }
                 return false;

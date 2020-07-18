@@ -83,14 +83,14 @@ public class CustomAdapter extends ArrayAdapter<Recipe> implements Filterable {
 
                 }else{
                     List<Recipe> resultsModel = new ArrayList<Recipe>();
-                    String searchStr = constraint.toString().toLowerCase();
+                    String searchStr = constraint.toString();
 
                     for(Recipe recipeModel:recipe){
-                        if(recipeModel.getName().contains(searchStr)){
+                        if(recipeModel.getName().toLowerCase().contains(searchStr)){
                             resultsModel.add(recipeModel);
-                            filterResults.count = resultsModel.size();
-                            filterResults.values = resultsModel;
                         }
+                        filterResults.count = resultsModel.size();
+                        filterResults.values = resultsModel;
                     }
                 }
 
