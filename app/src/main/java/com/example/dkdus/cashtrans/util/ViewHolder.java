@@ -1,4 +1,4 @@
-package com.example.dkdus.cashtrans;
+package com.example.dkdus.cashtrans.util;
 
 import android.widget.TextView;
 

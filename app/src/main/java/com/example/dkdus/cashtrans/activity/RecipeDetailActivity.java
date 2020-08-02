@@ -1,29 +1,26 @@
 package com.example.dkdus.cashtrans.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.room.Room;
 
-import com.example.dkdus.cashtrans.AppDatabase;
+import com.example.dkdus.cashtrans.database.AppDatabase;
 import com.example.dkdus.cashtrans.R;
 import com.example.dkdus.cashtrans.databinding.RecipeViewBinding;
 import com.example.dkdus.cashtrans.model.Recipe;
 import com.example.dkdus.cashtrans.model.RecipeDao;
+import com.example.dkdus.cashtrans.viewmodel.DetailViewModel;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -31,10 +28,10 @@ import java.time.format.DateTimeFormatter;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class RecipeDetailActivity extends AppCompatActivity {
     RecipeViewBinding binding;
-    AppDatabase db;
     Recipe recipe;
     String date;
     boolean isUpdate = false;
+    DetailViewModel viewModel;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
 
     @Override
@@ -42,9 +39,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.recipe_view);
 
-        db= Room.databaseBuilder(this, AppDatabase.class,"recipe-db" )
-                .build();
-
+        viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
         date = LocalDate.now().format(formatter);
 
         Intent intent=getIntent();
@@ -69,11 +64,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_store:
-                if(isUpdate){
+                if(isUpdate)
                     RecipeUpdate();
-                }else{
+                else
                     RecipeAdd();
-                }
                 return true;
             case R.id.menu_delete:
                 RecipeDelete();
@@ -86,7 +80,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     void RecipeAdd(){
         Recipe addRecipe = new Recipe(
                 binding.name.getText().toString(), binding.kind.getSelectedItem().toString(), binding.content.getText().toString(),date);
-        new InsertAsyncTask(db.recipeDao()).execute(addRecipe);
+        viewModel.insert(addRecipe);
         setResult(RESULT_OK);
         finish();
     }
@@ -94,14 +88,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
         recipe.setName(binding.name.getText().toString());
         recipe.setContents(binding.content.getText().toString());
         recipe.setKind(binding.kind.getSelectedItem().toString());
-
-        new UpdateAsyncTask(db.recipeDao()).execute(recipe);
+        viewModel.update(recipe);
         setResult(RESULT_OK);
         finish();
     }
     void RecipeDelete(){
-
-        new DeleteAsyncTask(db.recipeDao()).execute(recipe);
+        viewModel.delete(recipe);
         setResult(RESULT_OK);
         finish();
     }
@@ -120,46 +112,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
     }
 
-    private static class InsertAsyncTask extends AsyncTask<Recipe, Void, Void>{
-        RecipeDao mRecipeDao;
 
-        public InsertAsyncTask(RecipeDao mRecipeDao) {
-            this.mRecipeDao = mRecipeDao;
-        }
-
-        @Override
-        protected Void doInBackground(Recipe... recipes) {
-            mRecipeDao.insert(recipes[0]);
-            return null;
-        }
-    }
-
-    private static class UpdateAsyncTask extends AsyncTask<Recipe, Void, Void>{
-        RecipeDao mRecipeDao;
-
-        public UpdateAsyncTask(RecipeDao mRecipeDao) {
-            this.mRecipeDao = mRecipeDao;
-        }
-
-        @Override
-        protected Void doInBackground(Recipe... recipes) {
-            mRecipeDao.update(recipes[0]);
-            return null;
-        }
-    }
-
-    private static class DeleteAsyncTask extends AsyncTask<Recipe, Void, Void>{
-        RecipeDao mRecipeDao;
-
-        public DeleteAsyncTask(RecipeDao mRecipeDao) {
-            this.mRecipeDao = mRecipeDao;
-        }
-
-        @Override
-        protected Void doInBackground(Recipe... recipes) {
-            mRecipeDao.delete(recipes[0]);
-            return null;
-        }
-    }
 }
 

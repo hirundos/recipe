@@ -1,4 +1,4 @@
-package com.example.dkdus.cashtrans;
+package com.example.dkdus.cashtrans.util;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.dkdus.cashtrans.R;
 import com.example.dkdus.cashtrans.model.Recipe;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.dkdus.cashtrans;
+package com.example.dkdus.cashtrans.database;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
