@@ -12,3 +12,5 @@
 |--------|-------|
 |![Screenshot_26](https://user-images.githubusercontent.com/64885411/95821698-58f15100-0d65-11eb-80f4-f490586b93b8.png)|![recipe](https://user-images.githubusercontent.com/64885411/95821804-9d7cec80-0d65-11eb-9dc8-73c6d47dbef7.gif)|
 
+license
+<div>아이콘 제작자 <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/kr/" title="Flaticon">www.flaticon.com</a></div>
